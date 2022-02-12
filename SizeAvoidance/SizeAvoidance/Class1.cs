@@ -260,13 +260,60 @@ namespace CalculateWindowsEffectiveArea
                     }
                 }
             }
+            //新建并启动事务
+            Transaction transaction = new Transaction(doc,"标注文字避让");
+            transaction.Start();
+            //遍历找出相交的尺寸文字
+            for (int i = 0; i < tStructs.Count - 1; i++) 
+            {
+                for (int j = i+1; j < tStructs.Count; j++)
+                {
+                    //检测文字的范围框是否相交
+                    if (IsIntersect(tStructs[i], tStructs[j]))
+                    {
+                        //如果相交则移动尺寸文字，然后重新定义该结构体
+                        if (tStructs[j].isDim)//单段尺寸
+                        {
+                            Dimension dim = tStructs[j].dim;
 
-
-
+                        }
+                        else //尺寸段
+                        {
+                            Dimension dim = tStructs[j].dim;
+                        }
+                        
+                    }
+                }
+            }
+            transaction.Commit();
 
 
 
             return Result.Succeeded;
+        }
+
+        private bool IsIntersect(TextStruct text1, TextStruct text2)
+        {
+            //遍历标注文字范围框，相交时则标注出现重叠
+            foreach (Line line1 in text1.lines)
+            {
+                foreach (Line line2 in text2.lines)
+                {
+                    //交点数组
+                    IntersectionResultArray resultArray = new IntersectionResultArray();
+                    //枚举，用于判断相交类型
+                    SetComparisonResult setComparisonResult = line1.Intersect(line2,out resultArray);
+                    //Disjoint为不相交
+                    if (SetComparisonResult.Disjoint != setComparisonResult)
+                    {
+                        if (resultArray != null)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
     }
 }
