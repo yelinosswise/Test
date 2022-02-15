@@ -319,6 +319,10 @@ namespace CalculateWindowsEffectiveArea
 
         private bool IsVerticalX(TextStruct textStruct)
         {
+            if (textStruct.dirX.X == 0)
+            {
+                return true;
+            }
             //判断标线是否垂直于X轴
             return false;
         }
