@@ -286,16 +286,14 @@ namespace CalculateWindowsEffectiveArea
                         {
                             Dimension dim = tStructs[j].dim;
                             //标线垂直于x轴
-                            //if (IsVerticalX(tStructs[j]))
-                            //{
-                            //    dim.TextPosition += tStructs[j].dirY * tStructs[j].height * 1.05;
-                            //}
-                            //else //标线垂直于y轴
-                            //{
-                            //    dim.TextPosition += tStructs[j].dirX * tStructs[j].height * 1.05;
-                            //}
-                            dim.TextPosition += tStructs[j].dirY * tStructs[j].height * 1.05;
-                            dim.TextPosition += tStructs[j].dirX * tStructs[j].height * 1.05;
+                            if (IsVerticalX(tStructs[j]))
+                            {
+                                dim.TextPosition += tStructs[j].dirY * tStructs[j].height * 1.05;
+                            }
+                            else //标线垂直于y轴
+                            {
+                                dim.TextPosition += tStructs[j].dirX * tStructs[j].height * 1.05;
+                            }
                             tStructs[j] = GetTextStruct(doc, dim, null, true);
                         }
                         else //尺寸段
@@ -303,16 +301,14 @@ namespace CalculateWindowsEffectiveArea
                             Dimension dim = tStructs[j].dim;
                             DimensionSegment dimensionSegment = tStructs[j].dSeg;
                             //标线垂直于x轴
-                            //if (IsVerticalX(tStructs[j]))
-                            //{
-                            //    dimensionSegment.TextPosition += tStructs[j].dirY * tStructs[j].height * 1.05;
-                            //}
-                            //else//标线垂直于y轴
-                            //{
-                            //    dimensionSegment.TextPosition += tStructs[j].dirX * tStructs[j].height * 1.05;
-                            //}
-                            dimensionSegment.TextPosition += tStructs[j].dirY * tStructs[j].height * 1.05;
-                            dimensionSegment.TextPosition += tStructs[j].dirX * tStructs[j].height * 1.05;
+                            if (IsVerticalX(tStructs[j]))
+                            {
+                                dimensionSegment.TextPosition += tStructs[j].dirY * tStructs[j].height * 1.05;
+                            }
+                            else//标线垂直于y轴
+                            {
+                                dimensionSegment.TextPosition += tStructs[j].dirX * tStructs[j].height * 1.05;
+                            }
                             tStructs[j] = GetTextStruct(doc, dim, dimensionSegment, false);
                         }
 
