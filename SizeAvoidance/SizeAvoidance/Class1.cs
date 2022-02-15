@@ -261,12 +261,22 @@ namespace CalculateWindowsEffectiveArea
                 }
             }
             //新建并启动事务
-            Transaction transaction = new Transaction(doc,"标注文字避让");
+            Transaction transaction = new Transaction(doc, "标注文字避让");
             transaction.Start();
+            GetNewTextStruct(doc, tStructs);
+            transaction.Commit();
+
+
+
+            return Result.Succeeded;
+        }
+
+        private void GetNewTextStruct(Document doc, List<TextStruct> tStructs)
+        {
             //遍历找出相交的尺寸文字
-            for (int i = 0; i < tStructs.Count - 1; i++) 
+            for (int i = 0; i < tStructs.Count - 1; i++)
             {
-                for (int j = i+1; j < tStructs.Count; j++)
+                for (int j = i + 1; j < tStructs.Count; j++)
                 {
                     //检测文字的范围框是否相交
                     if (IsIntersect(tStructs[i], tStructs[j]))
@@ -275,21 +285,46 @@ namespace CalculateWindowsEffectiveArea
                         if (tStructs[j].isDim)//单段尺寸
                         {
                             Dimension dim = tStructs[j].dim;
-
+                            //标线垂直于x轴
+                            //if (IsVerticalX(tStructs[j]))
+                            //{
+                            //    dim.TextPosition += tStructs[j].dirY * tStructs[j].height * 1.05;
+                            //}
+                            //else //标线垂直于y轴
+                            //{
+                            //    dim.TextPosition += tStructs[j].dirX * tStructs[j].height * 1.05;
+                            //}
+                            dim.TextPosition += tStructs[j].dirY * tStructs[j].height * 1.05;
+                            dim.TextPosition += tStructs[j].dirX * tStructs[j].height * 1.05;
+                            tStructs[j] = GetTextStruct(doc, dim, null, true);
                         }
                         else //尺寸段
                         {
                             Dimension dim = tStructs[j].dim;
+                            DimensionSegment dimensionSegment = tStructs[j].dSeg;
+                            //标线垂直于x轴
+                            //if (IsVerticalX(tStructs[j]))
+                            //{
+                            //    dimensionSegment.TextPosition += tStructs[j].dirY * tStructs[j].height * 1.05;
+                            //}
+                            //else//标线垂直于y轴
+                            //{
+                            //    dimensionSegment.TextPosition += tStructs[j].dirX * tStructs[j].height * 1.05;
+                            //}
+                            dimensionSegment.TextPosition += tStructs[j].dirY * tStructs[j].height * 1.05;
+                            dimensionSegment.TextPosition += tStructs[j].dirX * tStructs[j].height * 1.05;
+                            tStructs[j] = GetTextStruct(doc, dim, dimensionSegment, false);
                         }
-                        
+
                     }
                 }
             }
-            transaction.Commit();
+        }
 
-
-
-            return Result.Succeeded;
+        private bool IsVerticalX(TextStruct textStruct)
+        {
+            //判断标线是否垂直于X轴
+            return false;
         }
 
         private bool IsIntersect(TextStruct text1, TextStruct text2)
