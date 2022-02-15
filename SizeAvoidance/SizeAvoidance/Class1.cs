@@ -319,7 +319,8 @@ namespace CalculateWindowsEffectiveArea
 
         private bool IsVerticalX(TextStruct textStruct)
         {
-            if (textStruct.dirX.X == 0)
+            
+            if (textStruct.dirX.GetLength() > textStruct.dirY.GetLength())
             {
                 return true;
             }
